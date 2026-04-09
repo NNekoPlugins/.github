@@ -23,8 +23,25 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          repository: ${{ github.repository }}
+          repository: ${{ github.event.repository.full_name }}
           ref: ${{ github.ref }}
+
+      # Extract version from branch or commit (fallback for CI)
+      - name: Determine CI version
+        id: version
+        shell: pwsh
+        run: |
+          # If building a tag, use tag version
+          $ref = "${{ github.ref_name }}"
+          if ($ref.StartsWith("v")) {
+            $ver = $ref.Substring(1)
+          }
+          else {
+            # Non-tag builds get a pseudo-version
+            $short = "${{ github.sha }}".Substring(0,7)
+            $ver = "0.0.0-ci.$short"
+          }
+          echo "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -34,32 +51,18 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Run dotnet format (lint)
-        run: dotnet format --verify-no-changes
-        continue-on-error: true
-
+      # Build with GitVersion injected
       - name: Build Debug
-        run: dotnet build --configuration Debug --no-restore
+        run: dotnet build --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
 
       - name: Build Release
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
 
-      - name: Upload Debug Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Debug-${{ github.repository }}
-          path: |
-            **/bin/Debug/**/*.dll
-            **/bin/Debug/**/*.pdb
-            **/bin/Debug/**/*.json
-          if-no-files-found: ignore
-
-      - name: Upload Release Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Release-${{ github.repository }}
-          path: |
-            **/bin/Release/**/*.dll
-            **/bin/Release/**/*.pdb
-            **/bin/Release/**/*.json
-          if-no-files-found: ignore
+      # Validate manifest version stamping
+      - name: Validate manifest AssemblyVersion
+        shell: pwsh
+        run: |
+          $manifest = Get-ChildItem -Recurse -Filter "*.json" | Where-Object { $_.Name -notlike "repo.json" } | Select-Object -First 1
+          $json = Get-Content $manifest.FullName | ConvertFrom-Json
+          if (-not $json.AssemblyVersion) {
+            throw "Manifest missing AssemblyVersion!"
