@@ -1,0 +1,55 @@
+name: "Release: Package & Publish"
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release Plugin
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout child repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build plugin
+        run: dotnet build --configuration Release
+
+      - name: Package plugin
+        run: dotnet pack --configuration Release
+
+      - name: Find packaged ZIP
+        id: find_zip
+        shell: pwsh
+        run: |
+          $zip = Get-ChildItem -Recurse -Filter "*.zip" | Select-Object -First 1
+          if (-not $zip) { throw "No plugin ZIP found!" }
+          echo "zip_path=$($zip.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: ${{ steps.find_zip.outputs.zip_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
