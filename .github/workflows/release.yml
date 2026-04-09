@@ -30,9 +30,24 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
+        
+      - name: Extract version from tag
+        id: version
+        run: |
+          $tag = "${{ github.ref_name }}"
+          if ($tag.StartsWith("v")) { $tag = $tag.Substring(1) }
+          echo "version=$tag" >> $env:GITHUB_OUTPUT
 
       - name: Build plugin
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
+
+      - name: Update manifest AssemblyVersion
+        shell: pwsh
+        run: |
+          $manifest = Get-ChildItem -Recurse -Filter "*.json" | Where-Object { $_.Name -notlike "repo.json" } | Select-Object -First 1
+          $json = Get-Content $manifest.FullName | ConvertFrom-Json
+          $json.AssemblyVersion = "${{ steps.version.outputs.version }}.0"
+          $json | ConvertTo-Json -Depth 10 | Set-Content $manifest.FullName -Encoding UTF8
 
       - name: Package plugin
         run: dotnet pack --configuration Release
