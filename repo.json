@@ -1,0 +1,23 @@
+{
+  "$schema": "https://goatcorp.github.io/dalamud-plugin-schema/pluginmaster-schema.json",
+  "Plugins": [
+    {
+      "Author": "NNekoPlugins",
+      "Name": "NNekoTriggers",
+      "Punchline": "Modular trigger system with DTR integration.",
+      "Description": "Provides zone triggers, RNG triggers, job-swap triggers, login triggers, and more.",
+      "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
+      "IconUrl": "https://raw.githubusercontent.com/NNekoPlugins/NNekoPlugins/main/Data/NNeko.png",
+      "Tags": [ "utility", "automation", "triggers" ]
+    },
+    {
+      "Author": "NNekoPlugins",
+      "Name": "NNekoWeaponIcons",
+      "Punchline": "Can't seem to find the right weapon for the job? This may help!",
+      "Description": "Adds a Clas/Job Icon Overlay in Armoury Chest. Split from VIWI plugin's Kitchen Sink module.",
+      "RepoUrl": "https://github.com/NNekoPlugins/NNekoWeaponIcons",
+      "IconUrl": "https://raw.githubusercontent.com/NNekoPlugins/NNekoPlugins/main/Data/NNeko.png",
+      "Tags": [ "ui", "icons", "visual" ]
+    }
+  ]
+}
