@@ -36,13 +36,13 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ${{ github.event.repository.name }}.csproj
 
       - name: Build Debug
-        run: dotnet build --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
+        run: dotnet build ${{ github.event.repository.name }}.csproj --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
 
       - name: Build Release
-        run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
+        run: dotnet build ${{ github.event.repository.name }}.csproj --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
