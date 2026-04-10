@@ -1,4 +1,4 @@
-name: Org CI - Build Plugin
+name: build
 
 on:
   workflow_call:
@@ -9,45 +9,36 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2025
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          sparse-checkout-cone-mode: false   # ← CRITICAL FIX
+          submodules: false
 
-      - name: Compute version (tag or pseudo)
-        id: version
-        shell: pwsh
-        run: |
-          $ref = "${{ github.ref_name }}"
-          if ($ref.StartsWith("v")) {
-            $ver = $ref.Substring(1)
-          } else {
-            $short = (git log -1 --format=%H).Substring(0,7)
-            $ver = "0.0.0-ci.$short"
-          }
-          "version=$ver" >> $env:GITHUB_OUTPUT
+      - name: Show repo root contents
+        run: dir
 
-      - name: Setup .NET
+      - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+          cache: false
+
+      - name: Verify SDK selection
+        run: dotnet --version
 
       - name: Restore
-        run: dotnet restore ${{ github.event.repository.name }}.csproj
+        run: dotnet restore NNekoTriggers.csproj
 
-      - name: Build Debug
-        run: dotnet build ${{ github.event.repository.name }}.csproj --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
+      - name: Build
+        run: dotnet build NNekoTriggers.csproj --configuration Release --no-restore
 
-      - name: Build Release
-        run: dotnet build ${{ github.event.repository.name }}.csproj --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
-
-      - name: Upload build artifacts
+      - name: Publish artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-build-${{ steps.version.outputs.version }}
-          path: |
-            **/bin/Debug/**
-            **/bin/Release/**
+          name: NNekoTriggers
+          path: bin/Release
