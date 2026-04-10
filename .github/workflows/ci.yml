@@ -1,4 +1,4 @@
-name: Build Plugin
+name: Org CI - Build Plugin
 
 on:
   workflow_call:
@@ -9,13 +9,26 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2025
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Compute version (tag or pseudo)
+        id: version
+        shell: pwsh
+        run: |
+          $ref = "${{ github.ref_name }}"
+          if ($ref.StartsWith("v")) {
+            $ver = $ref.Substring(1)
+          } else {
+            $short = (git log -1 --format=%H).Substring(0,7)
+            $ver = "0.0.0-ci.$short"
+          }
+          "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -26,15 +39,15 @@ jobs:
         run: dotnet restore
 
       - name: Build Debug
-        run: dotnet build --configuration Debug /p:GitVersion=${{ inputs.version }}
+        run: dotnet build --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
 
       - name: Build Release
-        run: dotnet build --configuration Release /p:GitVersion=${{ inputs.version }}
+        run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
 
-      - name: Upload Artifacts
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-artifacts
+          name: ${{ github.event.repository.name }}-build-${{ steps.version.outputs.version }}
           path: |
-            **/bin/Debug/*
-            **/bin/Release/*
+            **/bin/Debug/**
+            **/bin/Release/**
