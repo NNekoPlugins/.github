@@ -1,77 +1,53 @@
-name: "Release: Package & Publish"
+name: Org Release - Tag Build
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_call:
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   release:
-    name: Build & Release Plugin
-    runs-on: windows-latest
+    runs-on: windows-2025
 
     steps:
-      - name: Checkout child repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          repository: ${{ github.event.repository.full_name }}
-          ref: ${{ github.ref }}
 
-      # Extract version from tag (v1.2.3 → 1.2.3)
-      - name: Extract version from tag
+      - name: Compute version from tag
         id: version
         shell: pwsh
         run: |
-          $tag = "${{ github.ref_name }}"
-          if ($tag.StartsWith("v")) { $tag = $tag.Substring(1) }
-          echo "version=$tag" >> $env:GITHUB_OUTPUT
+          $ref = "${{ github.ref_name }}"
+          if (-not $ref.StartsWith("v")) {
+            Write-Error "Release workflow must be run on a tag starting with 'v'"
+          }
+          $ver = $ref.Substring(1)
+          "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.x"
+          dotnet-version: 9.0.x
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore
 
-      # Build with GitVersion injected
-      - name: Build plugin
+      - name: Build Release
         run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
 
-      # Patch manifest AssemblyVersion to match DLL version
-      - name: Update manifest AssemblyVersion
-        shell: pwsh
-        run: |
-          $manifest = Get-ChildItem -Recurse -Filter "*.json" | Where-Object { $_.Name -notlike "repo.json" } | Select-Object -First 1
-          $json = Get-Content $manifest.FullName | ConvertFrom-Json
-          $json.AssemblyVersion = "${{ steps.version.outputs.version }}.0"
-          $json | ConvertTo-Json -Depth 10 | Set-Content $manifest.FullName -Encoding UTF8
-
-      # Package plugin (DalamudPackager)
       - name: Package plugin
-        run: dotnet pack --configuration Release
-
-      # Locate the packaged ZIP
-      - name: Find packaged ZIP
-        id: find_zip
         shell: pwsh
         run: |
-          $zip = Get-ChildItem -Recurse -Filter "*.zip" | Select-Object -First 1
-          if (-not $zip) { throw "No plugin ZIP found!" }
-          echo "zip_path=$($zip.FullName)" >> $env:GITHUB_OUTPUT
+          $out = "artifacts"
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          Get-ChildItem -Recurse -Include *.dll,*.json,*.png,*.ico,CHANGELOG.md |
+            Copy-Item -Destination $out -Force
+          Compress-Archive -Path "$out\*" -DestinationPath "NNekoPlugin-${{ steps.version.outputs.version }}.zip" -Force
 
-      # Create GitHub Release in the child repo
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          files: ${{ steps.find_zip.outputs.zip_path }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ github.event.repository.name }}-release-${{ steps.version.outputs.version }}
+          path: |
+            NNekoPlugin-${{ steps.version.outputs.version }}.zip
+            artifacts/**
