@@ -37,7 +37,7 @@ You can install all NNekoPlugins through Dalamud’s **Custom Plugin Repositorie
 3. Add this URL:
 
 ```
-https://raw.githubusercontent.com/NNekoPlugins/NNekoPlugins/main/repo.json
+https://raw.githubusercontent.com/NNekoPlugins/.github/main/repo.json
 ```
 
 
