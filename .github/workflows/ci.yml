@@ -1,68 +1,40 @@
-name: "CI: Build & Validate"
+name: Build Plugin
 
 on:
-  push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
   workflow_call:
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    inputs:
+      version:
+        required: false
+        type: string
 
 jobs:
   build:
-    name: Build Plugin
     runs-on: windows-latest
 
     steps:
-      - name: Checkout child repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          repository: ${{ github.event.repository.full_name }}
-          ref: ${{ github.ref }}
-
-      # Extract version from branch or commit (fallback for CI)
-      - name: Determine CI version
-        id: version
-        shell: pwsh
-        run: |
-          # If building a tag, use tag version
-          $ref = "${{ github.ref_name }}"
-          if ($ref.StartsWith("v")) {
-            $ver = $ref.Substring(1)
-          }
-          else {
-            # Non-tag builds get a pseudo-version
-            $short = "${{ github.sha }}".Substring(0,7)
-            $ver = "0.0.0-ci.$short"
-          }
-          echo "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.x"
+          dotnet-version: 9.0.x
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore
 
-      # Build with GitVersion injected
       - name: Build Debug
-        run: dotnet build --configuration Debug /p:GitVersion=${{ steps.version.outputs.version }}
+        run: dotnet build --configuration Debug /p:GitVersion=${{ inputs.version }}
 
       - name: Build Release
-        run: dotnet build --configuration Release /p:GitVersion=${{ steps.version.outputs.version }}
+        run: dotnet build --configuration Release /p:GitVersion=${{ inputs.version }}
 
-      # Validate manifest version stamping
-      - name: Validate manifest AssemblyVersion
-        shell: pwsh
-        run: |
-          $manifest = Get-ChildItem -Recurse -Filter "*.json" | Where-Object { $_.Name -notlike "repo.json" } | Select-Object -First 1
-          $json = Get-Content $manifest.FullName | ConvertFrom-Json
-          if (-not $json.AssemblyVersion) {
-            throw "Manifest missing AssemblyVersion!"
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-artifacts
+          path: |
+            **/bin/Debug/*
+            **/bin/Release/*
