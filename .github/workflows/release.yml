@@ -1,21 +1,23 @@
-name: Release
+name: NNekoPlugins Plugin Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   release:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Setup .NET
+    - name: Setup .NET 8
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
@@ -24,17 +26,24 @@ jobs:
       run: dotnet tool install --global DalamudPackager
 
     - name: Restore
-      run: dotnet restore NNekoTriggers.csproj
+      run: dotnet restore
 
     - name: Build
-      run: dotnet build NNekoTriggers.csproj -c Release --no-restore
+      run: dotnet build -c Release --no-restore
 
     - name: Package
       run: |
         $env:PATH += ";$env:USERPROFILE\.dotnet\tools"
         dalamudpackager pack -o artifacts
 
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: plugin-release
+        path: artifacts
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: ${{ inputs.version }}
         files: artifacts/**
