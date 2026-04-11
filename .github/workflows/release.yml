@@ -28,6 +28,9 @@ jobs:
           dotnet-version: 8.0.x
           cache: false
 
+      - name: Install DalamudPackager tool
+        run: dotnet tool install --global DalamudPackager
+
       - name: Add NuGet feeds
         run: |
           dotnet nuget add source https://api.nuget.org/v3/index.json `
