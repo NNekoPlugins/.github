@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          sparse-checkout-cone-mode: false   # ← CRITICAL FIX
+          sparse-checkout-cone-mode: false
           submodules: false
 
       - name: Show repo root contents
@@ -28,6 +28,14 @@ jobs:
           dotnet-version: 8.0.x
           cache: false
 
+      - name: Add Dalamud NuGet feed
+        run: |
+          dotnet nuget add source https://pkgs.dev.azure.com/goatcorp/Dalamud/_packaging/Dalamud/nuget/v3/index.json `
+            --name Dalamud `
+            --store-password-in-clear-text `
+            --username "user" `
+            --password "pass"
+
       - name: Verify SDK selection
         run: dotnet --version
 
@@ -37,8 +45,8 @@ jobs:
       - name: Build
         run: dotnet build NNekoTriggers.csproj --configuration Release --no-restore
 
-      - name: Publish artifacts
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: NNekoTriggers
+          name: NNekoTriggers-Build
           path: bin/Release
