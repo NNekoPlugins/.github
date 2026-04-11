@@ -28,10 +28,16 @@ jobs:
           dotnet-version: 8.0.x
           cache: false
 
-      - name: Add Dalamud NuGet feed
+      - name: Add Dalamud NuGet feeds
         run: |
           dotnet nuget add source https://pkgs.dev.azure.com/goatcorp/Dalamud/_packaging/Dalamud/nuget/v3/index.json `
             --name Dalamud `
+            --store-password-in-clear-text `
+            --username "user" `
+            --password "pass"
+
+          dotnet nuget add source https://pkgs.dev.azure.com/goatcorp/Dalamud/_packaging/DalamudSdk/nuget/v3/index.json `
+            --name DalamudSdk `
             --store-password-in-clear-text `
             --username "user" `
             --password "pass"
