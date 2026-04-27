@@ -35,11 +35,10 @@ If you maintain a plugin under this organization and want it listed here, submit
 
 1. Open **XIVLauncher → Settings → Experimental**  
 2. Enable **Custom Plugin Repositories**  
-~~3. Add this URL:~~
-3. Add the URL for the individual plugin from the list above.
+3. ~~Add this URL:~~ Add the URL for the individual plugin from the list above.
 
 <!--```-->
-~~https://raw.githubusercontent.com/NNekoPlugins/.github/main/repo.json~~
+~~https://<!--break-->raw.githubusercontent.com/NNekoPlugins/.github/main/repo.json~~
 <!--```-->
 
 
