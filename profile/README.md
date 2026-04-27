@@ -22,6 +22,7 @@ Each plugin includes a link to its repository and a short description.
 |--------|-------------|
 | [NNekoTriggers](https://github.com/NNekoPlugins/NNekoTriggers) | Modular trigger system with DTR integration, zone triggers, RNG triggers, job‑swap triggers, and more. |
 | [NNekoWeaponIcons](https://github.com/NNekoPlugins/NNekoWeaponIcons) | Adds a Clas/Job Icon Overlay in Armoury Chest. Split from VIWI plugin's Kitchen Sink module. |
+| [AqrNarrator](https://github.com/NNekoPlugins/AqrNarrator) | Narrates A Quest Reborn dialog into a separate window. |
 <!--| *(Add new plugins here as the ecosystem grows)* | |-->
 
 If you maintain a plugin under this organization and want it listed here, submit a PR.
@@ -30,19 +31,20 @@ If you maintain a plugin under this organization and want it listed here, submit
 
 ## 📦 Installing NNekoPlugins
 
-You can install all NNekoPlugins through Dalamud’s **Custom Plugin Repositories** feature.
+~~You can install all NNekoPlugins through Dalamud’s **Custom Plugin Repositories** feature.~~
 
 1. Open **XIVLauncher → Settings → Experimental**  
 2. Enable **Custom Plugin Repositories**  
-3. Add this URL:
+~~3. Add this URL:~~
+3. Add the URL for the individual plugin from the list above.
 
-```
-https://raw.githubusercontent.com/NNekoPlugins/.github/main/repo.json
-```
+<!--```-->
+~~https://raw.githubusercontent.com/NNekoPlugins/.github/main/repo.json~~
+<!--```-->
 
 
 4. Save and refresh the plugin list  
-5. All NNekoPlugins will now appear in the Dalamud plugin browser
+~~5. All NNekoPlugins will now appear in the Dalamud plugin browser~~
 
 ---
 
