@@ -12,7 +12,10 @@
         "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
         "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.3.0/latest.zip",
         "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.3.0/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.3.0/latest.zip"
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.3.0/latest.zip",
+        "LoadRequiredState": "0",
+        "CanUnloadAsync": "false",
+        "LoadSync": "true"
     },
     {
         "Author": "NaughtyNeko",
@@ -25,7 +28,10 @@
         "RepoUrl": "https://github.com/NNekoPlugins/NNekoWeaponIcons"
         "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.0.9/latest.zip",
         "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.0.9/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.0.9/latest.zip"
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.0.9/latest.zip",
+        "LoadRequiredState": "0",
+        "CanUnloadAsync": "false",
+        "LoadSync": "true"
     },
     {
         "Author": "NaughtyNeko",
@@ -38,7 +44,10 @@
         "RepoUrl": "https://github.com/NNekoPlugins/AqrNarrator"
         "DownloadLinkInstall": "https://github.com/NNekoPlugins/AqrNarrator/releases/download/v0.0.0.5/latest.zip",
         "DownloadLinkTesting": "https://github.com/NNekoPlugins/AqrNarrator/releases/download/v0.0.0.5/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/AqrNarrator/releases/download/v0.0.0.5/latest.zip"
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/AqrNarrator/releases/download/v0.0.0.5/latest.zip",
+        "LoadRequiredState": "0",
+        "CanUnloadAsync": "false",
+        "LoadSync": "true"
     }
   ]
 }
