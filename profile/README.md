@@ -45,6 +45,8 @@ If you maintain a plugin under this organization and want it listed here, submit
 4. Save and refresh the plugin list  
 ~~5. All NNekoPlugins will now appear in the Dalamud plugin browser~~
 
+If you want an easier place to find 3rd party plugins and copy installable repository links, check out [Aetherfeed](https://beslightly.github.io/Aetherfeed)!
+
 ---
 
 ## 🛠 Development & Contribution
