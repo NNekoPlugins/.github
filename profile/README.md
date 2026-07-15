@@ -22,8 +22,8 @@ Each plugin includes a link to its repository and a short description.
 |--------|-------------|
 | [Triggers](https://github.com/NNekoPlugins/NNekoTriggers) | Modular trigger system with DTR integration, zone triggers, RNG triggers, job‑swap triggers, and more. |
 | [Weapon Icons](https://github.com/NNekoPlugins/NNekoWeaponIcons) | Adds a Clas/Job Icon Overlay in Armoury Chest. Split from VIWI plugin's Kitchen Sink module. |
-| [Idle Sync](https://raw.githubusercontent.com/NNekoPlugins/IdleSync/main/repo.json) | Automatically switches to the idle pose linked to your active Glamourer design. Command: /idlesync |
-| [C+ Sync](https://raw.githubusercontent.com/NNekoPlugins/CPSync/main/repo.json) | Automatically switches to the Customize+ profile linked to your active Glamourer design. Command: /cpsync |
+| [Idle Sync](https://github.com/NNekoPlugins/IdleSync) | Automatically switches to the idle pose linked to your active Glamourer design. Command: /idlesync |
+| [C+ Sync](https://github.com/NNekoPlugins/CPSync) | Automatically switches to the Customize+ profile linked to your active Glamourer design. Command: /cpsync |
 <!--| []() |  |-->
 <!--| *(Add new plugins here as the ecosystem grows)* | |-->
 
