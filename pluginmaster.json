@@ -11,7 +11,7 @@
         "Punchline": "Modular trigger system with DTR integration.",
         "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
         "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.4.8/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.4.8/latest.zip"
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.4.8/latest.zip",
         "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.0.4.8/latest.zip",
         "IconUrl": "https://github.com/NNekoPlugins/NNekoTriggers/Data/NNeko.png",
         "Tags": [ 
@@ -40,7 +40,7 @@
         "Punchline": "Can't seem to find the right weapon for the job?  This may help!",
         "RepoUrl": "https://github.com/NNekoPlugins/NNekoWeaponIcons"
         "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.2.0/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.2.0/latest.zip"
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.2.0/latest.zip",
         "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoWeaponIcons/releases/download/v0.0.2.0/latest.zip",
         "IconUrl": "https://github.com/NNekoPlugins/NNekoWeaponIcons/Data/NNeko.png",
         "Tags": [ 
@@ -52,6 +52,6 @@
         "CategoryTags": [ 
           "UI", 
           "Other" 
-        ],
+        ]
     }
 ]
