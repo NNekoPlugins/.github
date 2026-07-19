@@ -32,6 +32,7 @@
   {
     "Author": "NaughtyNeko",
     "Name": "NNeko's Weapon Icons",
+    "InternalName": "NNekoWeaponIcons",
     "AssemblyVersion": "0.0.2.0",
     "TestingAssemblyVersion": "0.0.2.0",
     "Description": "Adds a Clas/Job Icon Overlay in Armoury Chest.  Split from VIWI plugin's Kitchen Sink module.",
